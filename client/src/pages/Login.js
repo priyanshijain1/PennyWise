@@ -14,7 +14,7 @@ const Login = () => {
       setLoading(false);
       message.success("Login Successful");
       localStorage.setItem(
-        "user",
+        'user',
         JSON.stringify({ ...data.user, password: "" })
       );
       navigate("/");

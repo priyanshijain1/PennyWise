@@ -1,3 +1,4 @@
+import '@ant-design/v5-patch-for-react-19';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
