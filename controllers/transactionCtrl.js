@@ -15,10 +15,10 @@ const addTransaction = async(req, res) => {
     try {
         const newTransaction = new transactionModel(req.body)
         await newTransaction.save()
-        res.status(201).send('Transaction Created')
+        res.status(201).json({ success: true, message: 'Transaction Created', data: newTransaction })
     } catch (error) {
         console.log(error);
-        res.status(500).json(error);
+        res.status(400).json({ success: false, message: error.message });
     }
 }; 
 

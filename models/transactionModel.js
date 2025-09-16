@@ -1,25 +1,36 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const transactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema(
+  {
+    userid: {
+      type: String,
+      required: true,
+    },
     amount: {
-        type: String,
-        required: [true, "Amount is required"]
+      type: Number,
+      required: [true, "amount is required"],
+    },
+    type: {
+      type: String,
+      required: [true, "type is required"],
     },
     category: {
-        type: String,
-        required: [true, "Category is required"]
+      type: String,
+      required: [true, "category is required"],
     },
     reference: {
-        type: String,
+      type: String,
     },
     description: {
-        type: String,
-        required: [true, "Description is required"]
+      type: String,
     },
     date: {
-        type: String,
-        required: [true, "Date is required"]
+      type: String,
+      required: [true, "data is required"],
     },
-}, {
-    timestamps: true
-});
+  },
+  { timestamps: true }
+);
+
+const transactionModel = mongoose.model("transactions", transactionSchema);
+module.exports = transactionModel;
