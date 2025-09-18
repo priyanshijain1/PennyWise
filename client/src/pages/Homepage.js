@@ -180,10 +180,10 @@ const handleSubmit = async (values) => {
         </div>
       </div>
       <div className="content">
-        {viewData == "table" ?(
+        {viewData === "table" ?(
           <Table columns={columns} dataSource={alltransaction} rowKey="_id"/>
         ) : (
-          <Analytics allTransaction = {allTransaction} />
+          <Analytics alltransaction = {alltransaction} />
         )}
       </div>
       <Modal

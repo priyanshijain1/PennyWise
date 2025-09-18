@@ -1,37 +1,44 @@
 import React from "react";
 import { Progress } from "antd";
-const Analytics = ({ allTransection }) => {
+const Analytics = ({ alltransaction }) => {
   // total transaction
-  const totalTransaction = allTransection.length;
-  const totalIncomeTransactions = allTransection.filter(
+  const totalTransaction = alltransaction.length;
+  const totalIncomeTransactions = alltransaction.filter(
     (transaction) => transaction.type === "income"
   );
-  const totalExpenseTransactions = allTransection.filter(
+  const totalExpenseTransactions = alltransaction.filter(
     (transaction) => transaction.type === "expense"
   );
   const totalIncomePercent =
-    (totalIncomeTransactions.length / totalTransaction) * 100;
+    totalTransaction === 0
+      ? 0
+      : (totalIncomeTransactions.length / totalTransaction) * 100;
+
   const totalExpensePercent =
-    (totalExpenseTransactions.length / totalTransaction) * 100;
+    totalTransaction === 0
+      ? 0
+      : (totalExpenseTransactions.length / totalTransaction) * 100;
+
 
   //total turnover
-  const totalTurnover = allTransection.reduce(
+  const totalTurnover = alltransaction.reduce(
     (acc, transaction) => acc + transaction.amount,
     0
   );
-  const totalIncomeTurnover = allTransection
+  const totalIncomeTurnover = alltransaction
     .filter((transaction) => transaction.type === "income")
     .reduce((acc, transaction) => acc + transaction.amount, 0);
 
-  const totalExpenseTurnover = allTransection
+  const totalExpenseTurnover = alltransaction
     .filter((transaction) => transaction.type === "expense")
     .reduce((acc, transaction) => acc + transaction.amount, 0);
 
   const totalIncomeTurnoverPercent =
-    (totalIncomeTurnover / totalTurnover) * 100;
+    totalTurnover === 0 ? 0 : (totalIncomeTurnover / totalTurnover) * 100;
+
   const totalExpenseTurnoverPercent =
-    (totalExpenseTurnover / totalTurnover) * 100;
-  return (
+    totalTurnover === 0 ? 0 : (totalExpenseTurnover / totalTurnover) * 100;
+  return(
     <>
       <div className="row m-3">
         <div className="col-md-4">
@@ -88,7 +95,7 @@ const Analytics = ({ allTransection }) => {
         </div>
       </div>
     </>
-  );
+    );
 };
 
 export default Analytics;
