@@ -1,55 +1,145 @@
-import React,{useState,useEffect} from 'react';
-import {Form , Input} from 'antd';
-import {message} from "antd";
-import {Link,useNavigate} from "react-router-dom";
-import axios from "axios"
+import React, { useState, useEffect } from 'react';
+import { Form, Input, message, Card, Typography, Button } from 'antd';
+import { Link, useNavigate } from "react-router-dom";
+import { UserOutlined, MailOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
+import axios from "axios";
 import Spinner from "../components/Spinner";
 
+const { Title, Text } = Typography;
+
 const Register = () => {
-const navigate = useNavigate();
-const [loading,setLoading] = useState(false);
-  // from submit
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  // form submit
   const submitHandler = async (values) => {
-    try{
-      setLoading(true)
-      await axios.post('/users/register',values);
-      message.success("Registration Successful");
+    try {
+      setLoading(true);
+      await axios.post('/users/register', values);
+      message.success("Account created successfully! Please sign in.");
       setLoading(false);
       navigate('/login');
-    } catch(error){
-      setLoading(false)
-      message.error("Something went wrong");
+    } catch (error) {
+      setLoading(false);
+      message.error("Registration failed. Please try again.");
     }
   };
 
-//prevent for login user
-useEffect(() => {
-  if (localStorage.getItem("user")) {
-    navigate("/");
-  }
-}, [navigate]);
+  //prevent for login user
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
-    <>
     <div className="register-page">
       {loading && <Spinner />}
-        <Form layout = "vertical" onFinish={submitHandler}>
-          <h1>Register Form</h1>
-          <Form.Item label="Name" name="name">
-            <Input />
+      
+      <Card className="auth-card" bordered={false}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <Title level={2} className="auth-title">
+            Create Account
+          </Title>
+          <Text type="secondary" style={{ fontSize: 16 }}>
+            Join PennyWise to start managing your finances
+          </Text>
+        </div>
+
+        <Form
+          layout="vertical"
+          onFinish={submitHandler}
+          className="auth-form"
+          size="large"
+        >
+          <Form.Item
+            label="Full Name"
+            name="name"
+            rules={[
+              { required: true, message: "Please enter your full name" },
+              { min: 2, message: "Name must be at least 2 characters" }
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="Enter your full name"
+            />
           </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input type="email" />
+
+          <Form.Item
+            label="Email Address"
+            name="email"
+            rules={[
+              { required: true, message: "Please enter your email" },
+              { type: "email", message: "Please enter a valid email" }
+            ]}
+          >
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="Enter your email"
+              type="email"
+            />
           </Form.Item>
-          <Form.Item label="Password" name="password">
-            <Input type="password" />
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              { required: true, message: "Please create a password" },
+              { min: 6, message: "Password must be at least 6 characters" }
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Create a strong password"
+            />
           </Form.Item>
-          <div className="d-flex justify-content-between">
-            <Link to="/login">Already Registered ? Click here to login</Link>
-            <button  type="submit" className = "btn btn-primary">Register</button>
+
+          <Form.Item
+            label="Confirm Password"
+            name="confirmPassword"
+            dependencies={['password']}
+            rules={[
+              { required: true, message: "Please confirm your password" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Passwords do not match'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Confirm your password"
+            />
+          </Form.Item>
+
+          <Form.Item style={{ marginTop: 32 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="auth-submit-btn"
+              loading={loading}
+              icon={<UserAddOutlined />}
+            >
+              Create Account
+            </Button>
+          </Form.Item>
+
+          <div style={{ textAlign: "center", marginTop: 24 }}>
+            <Text>
+              Already have an account?{" "}
+              <Link to="/login" className="auth-link">
+                Sign in here
+              </Link>
+            </Text>
           </div>
         </Form>
+      </Card>
     </div>
-    </>
   );
 };
 
