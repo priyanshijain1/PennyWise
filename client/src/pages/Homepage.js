@@ -51,6 +51,10 @@ const HomePage = () => {
           <EditOutlined
             onClick={() => {
               setEditable(record);
+              form.setFieldsValue({
+                ...record,
+                date: moment(record.date).format("YYYY-MM-DD"), // make date input compatible
+              });
               setShowModal(true);
             }}
           />
@@ -100,7 +104,7 @@ useEffect(() => {
     try {
       setLoading(true);
       await axios.post("/transactions/delete-transaction", {
-        transacationId: record._id,
+        transactionId: record._id,
       });
       setLoading(false);
       message.success("Transaction Deleted!");
@@ -109,6 +113,7 @@ useEffect(() => {
       console.log(error);
       message.error("Unable to delete");
     }
+    await getAllTransactions();
   };
 
 
@@ -125,7 +130,7 @@ const handleSubmit = async (values) => {
             ...values,
             userId: user._id,
           },
-          transacationId: editable._id,
+          transactionId: editable._id,
         });
         setLoading(false);
         message.success("Transaction Updated Successfully");
@@ -166,6 +171,7 @@ const handleSubmit = async (values) => {
       message.error("Network error. Please try again.");
     }
   }
+  await getAllTransactions();
 };
 
 // const handleModalClose = () => {
@@ -224,7 +230,11 @@ const handleSubmit = async (values) => {
         <div>
           <button
             className="btn btn-primary"
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setEditable(null);
+              form.resetFields();
+              setShowModal(true);
+            }}
           >
             Add New
           </button>
