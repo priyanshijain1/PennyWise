@@ -15,18 +15,14 @@
 - [Tech Stack](#tech-stack)  
 - [Setup / Installation](#setup--installation)  
 - [Usage](#usage)  
-- [Screenshots](#screenshots)  
-- [API Documentation](#api-documentation)  
-- [Contributing](#contributing)  
-- [License](#license)  
 
-
+---
 
 ## 📖 Overview
 PennyWise is designed to simplify **personal finance management**.  
 It allows you to **record transactions, categorize them, filter/search, and visualize** your spending vs. income with intuitive analytics dashboards.  
 
-
+---
 
 ## ✨ Features
 - 🔑 User authentication and secure API endpoints  
@@ -39,7 +35,7 @@ It allows you to **record transactions, categorize them, filter/search, and visu
 - 📱 Responsive design with **Ant Design**  
 - ⚡ Fast API using **Express.js + MongoDB**  
 
-
+---
 
 ## 🛠 Tech Stack
 
@@ -52,12 +48,15 @@ It allows you to **record transactions, categorize them, filter/search, and visu
 
 ---
 
+
+
 ## ⚡ Setup / Installation
 
 1. **Clone the repo**
    ```bash
    git clone https://github.com/priyanshijain1/PennyWise.git
    cd PennyWise
+
 
 2. **Backend setup**
     ```bash
@@ -67,20 +66,28 @@ It allows you to **record transactions, categorize them, filter/search, and visu
     PORT=8080 (or any available port)
     npm run server
 
+
 3. **Frontend setup**
     ```bash
     cd client
     npm install
     npm start
+
     
 4. **Access the app**
-    - Backend: http://localhost:8080
-    - Frontend: http://localhost:3000
+    - Backend:
+       ```bash
+       http://localhost:8080
+     
+    - Frontend:
+       ```bash
+       http://localhost:3000
+
+---
 
 ## 🚀 Usage
-
 - Go to the homepage and click Add New to record a transaction.
 - Use the Edit ✏️ icon to update transaction details.
 - Use the Delete ❌ icon to remove unwanted transactions.
 - Switch between Table View and Analytics View using the icons.
-- Filter by frequency (last week/month/year/custom) or type (income/expense).
+- Filter by frequency or type.
