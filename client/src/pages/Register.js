@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, message, Card, Typography, Button } from 'antd';
+import { Form, Input, message, Card, Typography, Button, Alert } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, MailOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -10,6 +10,7 @@ const { Title, Text } = Typography;
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   // form submit
   const submitHandler = async (values) => {
@@ -21,7 +22,24 @@ const Register = () => {
       navigate('/login');
     } catch (error) {
       setLoading(false);
-      message.error("Registration failed. Please try again.");
+      
+      // Check if it's a duplicate email error
+      if (error.response?.status === 400 && 
+          (error.response?.data?.message?.includes('already exists') || 
+           error.response?.data?.error === 'DUPLICATE_EMAIL' ||
+           error.response?.data?.message?.includes('E11000') ||
+           error.response?.data?.error?.code === 11000)) {
+        
+        message.warning("This email is already registered. Redirecting to login...");
+        setRedirecting(true);
+        
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } else {
+        message.error(error.response?.data?.message || "Registration failed. Please try again.");
+      }
     }
   };
 
@@ -37,6 +55,16 @@ const Register = () => {
       {loading && <Spinner />}
       
       <Card className="auth-card" bordered={false}>
+        {redirecting && (
+          <Alert
+            message="Email Already Registered"
+            description="This email is already in our system. Redirecting you to the login page..."
+            type="info"
+            showIcon
+            style={{ marginBottom: 24, borderRadius: 8 }}
+          />
+        )}
+
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <Title level={2} className="auth-title">
             Create Account
