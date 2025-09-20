@@ -334,7 +334,7 @@ const HomePage = () => {
           <Col xs={24} sm={6}>
             <Space direction="vertical" style={{ width: "100%" }}>
               <Text strong>View Mode</Text>
-              <Button.Group style={{ width: "100%" }}>
+              <Space.Compact style={{ width: "100%" }}>
                 <Button
                   type={viewData === "table" ? "primary" : "default"}
                   icon={<UnorderedListOutlined />}
@@ -349,7 +349,7 @@ const HomePage = () => {
                 >
                   Analytics
                 </Button>
-              </Button.Group>
+              </Space.Compact>
             </Space>
           </Col>
 
