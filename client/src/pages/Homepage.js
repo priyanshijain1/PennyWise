@@ -10,6 +10,13 @@ import Spinner from "./../components/Spinner";
 import moment from "moment";
 import Analytics from "../components/Analytics";
 
+
+const getAuthConfig = () => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -36,7 +43,6 @@ const HomePage = () => {
   
   const balance = totalIncome - totalExpense;
 
-  // Enhanced table columns with better styling
   const columns = [
     {
       title: "Date",
@@ -150,14 +156,15 @@ const HomePage = () => {
   // Get all transactions
   const getAllTransactions = useCallback(async () => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
       setLoading(true);
       const res = await axios.post("http://localhost:8080/api/v1/transactions/get-transaction", {
-        userid: user._id,
         frequency,
         selectedDate,
         type,
-      });
+      },
+      getAuthConfig()
+    );
+      
 
       setLoading(false);
       setAlltransaction(res.data);
@@ -179,7 +186,9 @@ const HomePage = () => {
       setLoading(true);
       await axios.post("http://localhost:8080/api/v1/transactions/delete-transaction", {
         transactionId: record._id,
-      });
+      },
+      getAuthConfig()
+    );
       setLoading(false);
       message.success("Transaction deleted successfully!");
       await getAllTransactions();
@@ -200,10 +209,11 @@ const HomePage = () => {
         await axios.post("http://localhost:8080/api/v1/transactions/edit-transaction", {
           payload: {
             ...values,
-            userId: user._id,
           },
           transactionId: editable._id,
-        });
+        },
+        getAuthConfig()
+      );
         setLoading(false);
         message.success("Transaction updated successfully");
       } else {
@@ -213,7 +223,7 @@ const HomePage = () => {
           userid: user._id,
         };
 
-        await axios.post("http://localhost:8080/api/v1/transactions/add-transaction", transactionData);
+        await axios.post("http://localhost:8080/api/v1/transactions/add-transaction", transactionData,getAuthConfig());
         setLoading(false);
         message.success("Transaction added successfully");
       }
@@ -511,3 +521,6 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+

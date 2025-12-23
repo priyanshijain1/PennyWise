@@ -18,6 +18,7 @@ const Login = () => {
       const { data } = await axios.post("http://localhost:8080/api/v1/users/login", values);
       setLoading(false);
       message.success("Welcome back! Login successful");
+      localStorage.setItem("token", data.token);
       localStorage.setItem(
         'user',
         JSON.stringify({ ...data.user, password: "" })
@@ -113,4 +114,99 @@ const Login = () => {
 
 export default Login;
 
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import { Form, Input, message, Card, Typography, Button } from "antd";
+// import { Link, useNavigate } from "react-router-dom";
+// import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
+// import API from "../utils/api";
+// import Spinner from "../components/Spinner";
+
+// const { Title, Text } = Typography;
+
+// const Login = () => {
+//   const [loading, setLoading] = useState(false);
+//   const navigate = useNavigate();
+
+//   const submitHandler = async (values) => {
+//     try {
+//       setLoading(true);
+
+//       const { data } = await API.post("/users/login", values);
+
+//       // 🔐 STORE JWT
+//       localStorage.setItem("token", data.token);
+
+//       // store user (safe fields only)
+//       localStorage.setItem("user", JSON.stringify(data.user));
+
+//       setLoading(false);
+//       message.success("Login successful");
+//       navigate("/");
+//     } catch (error) {
+//       setLoading(false);
+//       message.error("Invalid email or password");
+//     }
+//   };
+
+//   // If already logged in, redirect
+//   useEffect(() => {
+//     if (localStorage.getItem("token")) {
+//       navigate("/");
+//     }
+//   }, [navigate]);
+
+//   return (
+//     <div className="register-page">
+//       {loading && <Spinner />}
+
+//       <Card className="auth-card">
+//         <div style={{ textAlign: "center", marginBottom: 24 }}>
+//           <Title level={2}>Welcome Back</Title>
+//           <Text type="secondary">Sign in to PennyWise</Text>
+//         </div>
+
+//         <Form layout="vertical" onFinish={submitHandler} size="large">
+//           <Form.Item
+//             label="Email"
+//             name="email"
+//             rules={[{ required: true, message: "Please enter email" }]}
+//           >
+//             <Input prefix={<UserOutlined />} placeholder="Email" />
+//           </Form.Item>
+
+//           <Form.Item
+//             label="Password"
+//             name="password"
+//             rules={[{ required: true, message: "Please enter password" }]}
+//           >
+//             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+//           </Form.Item>
+
+//           <Form.Item>
+//             <Button
+//               type="primary"
+//               htmlType="submit"
+//               loading={loading}
+//               icon={<LoginOutlined />}
+//               block
+//             >
+//               Login
+//             </Button>
+//           </Form.Item>
+
+//           <Text>
+//             New here? <Link to="/register">Create an account</Link>
+//           </Text>
+//         </Form>
+//       </Card>
+//     </div>
+//   );
+// };
+
+// export default Login;
 
