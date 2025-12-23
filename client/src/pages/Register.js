@@ -47,7 +47,7 @@ const submitHandler = async (values) => {
 
   //prevent for login user
   useEffect(() => {
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem("token")) {
       navigate("/");
     }
   }, [navigate]);
