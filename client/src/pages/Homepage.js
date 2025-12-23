@@ -152,7 +152,7 @@ const HomePage = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       setLoading(true);
-      const res = await axios.post("transactions/get-transaction", {
+      const res = await axios.post("http://localhost:8080/api/v1/transactions/get-transaction", {
         userid: user._id,
         frequency,
         selectedDate,
@@ -177,7 +177,7 @@ const HomePage = () => {
   const handleDelete = async (record) => {
     try {
       setLoading(true);
-      await axios.post("/transactions/delete-transaction", {
+      await axios.post("http://localhost:8080/api/v1/transactions/delete-transaction", {
         transactionId: record._id,
       });
       setLoading(false);
@@ -197,7 +197,7 @@ const HomePage = () => {
       setLoading(true);
       
       if (editable) {
-        await axios.post("/transactions/edit-transaction", {
+        await axios.post("http://localhost:8080/api/v1/transactions/edit-transaction", {
           payload: {
             ...values,
             userId: user._id,
@@ -213,7 +213,7 @@ const HomePage = () => {
           userid: user._id,
         };
 
-        await axios.post("/transactions/add-transaction", transactionData);
+        await axios.post("http://localhost:8080/api/v1/transactions/add-transaction", transactionData);
         setLoading(false);
         message.success("Transaction added successfully");
       }
