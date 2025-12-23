@@ -21,6 +21,7 @@
   "dependencies": {
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "antd": "^5.24.4",
+    "bcryptjs": "^3.0.3",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

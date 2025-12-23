@@ -15,7 +15,7 @@ const Login = () => {
   const submitHandler = async (values) => {
     try {
       setLoading(true);
-      const { data } = await axios.post("http://localhost:8080/api/v1/users/login", values);
+      const { data } = await axios.post("/api/v1/users/login", values);
       setLoading(false);
       message.success("Welcome back! Login successful");
       localStorage.setItem("token", data.token);
@@ -32,7 +32,7 @@ const Login = () => {
 
   //prevent for login user
   useEffect(() => {
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem("token")) {
       navigate("/");
     }
   }, [navigate]);

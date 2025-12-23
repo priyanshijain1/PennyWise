@@ -6,7 +6,7 @@ const getAllTransaction = async (req, res) => {
     const { frequency, selectedDate, type } = req.body;
 
     const transactions = await transactionModel.find({
-      userid: req.user,   // 🔐 FROM JWT, NOT FRONTEND
+      userid: req.user,   
       ...(frequency !== "custom"
         ? {
             date: {

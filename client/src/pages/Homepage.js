@@ -157,7 +157,7 @@ const HomePage = () => {
   const getAllTransactions = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:8080/api/v1/transactions/get-transaction", {
+      const res = await axios.post("/api/v1/transactions/get-transaction", {
         frequency,
         selectedDate,
         type,
@@ -184,7 +184,7 @@ const HomePage = () => {
   const handleDelete = async (record) => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:8080/api/v1/transactions/delete-transaction", {
+      await axios.post("/api/v1/transactions/delete-transaction", {
         transactionId: record._id,
       },
       getAuthConfig()
@@ -202,11 +202,10 @@ const HomePage = () => {
   // Form handling
   const handleSubmit = async (values) => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
       setLoading(true);
       
       if (editable) {
-        await axios.post("http://localhost:8080/api/v1/transactions/edit-transaction", {
+        await axios.post("/api/v1/transactions/edit-transaction", {
           payload: {
             ...values,
           },
@@ -220,10 +219,9 @@ const HomePage = () => {
         const transactionData = {
           ...values,
           amount: Number(values.amount),
-          userid: user._id,
         };
 
-        await axios.post("http://localhost:8080/api/v1/transactions/add-transaction", transactionData,getAuthConfig());
+        await axios.post("/api/v1/transactions/add-transaction", transactionData,getAuthConfig());
         setLoading(false);
         message.success("Transaction added successfully");
       }

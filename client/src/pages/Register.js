@@ -13,35 +13,37 @@ const Register = () => {
   const [redirecting, setRedirecting] = useState(false);
 
   // form submit
-  const submitHandler = async (values) => {
-    try {
-      setLoading(true);
-      await axios.post('http://localhost:8080/api/v1/users/register', values);
-      message.success("Account created successfully! Please sign in.");
-      setLoading(false);
-      navigate('/login');
-    } catch (error) {
-      setLoading(false);
-      
-      // Check if it's a duplicate email error
-      if (error.response?.status === 400 && 
-          (error.response?.data?.message?.includes('already exists') || 
-           error.response?.data?.error === 'DUPLICATE_EMAIL' ||
-           error.response?.data?.message?.includes('E11000') ||
-           error.response?.data?.error?.code === 11000)) {
-        
-        message.warning("This email is already registered. Redirecting to login...");
-        setRedirecting(true);
-        
-        // Redirect to login after a short delay
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        message.error(error.response?.data?.message || "Registration failed. Please try again.");
-      }
+const submitHandler = async (values) => {
+  try {
+    setLoading(true);
+
+    // remove confirmPassword before sending to backend
+    const { confirmPassword, ...payload } = values;
+
+    await axios.post('/api/v1/users/register', payload);
+
+    message.success("Account created successfully! Please sign in.");
+    setLoading(false);
+    navigate('/login');
+  } catch (error) {
+    setLoading(false);
+
+    if (
+      error.response?.status === 400 &&
+      (error.response?.data?.message?.includes('already exists') ||
+        error.response?.data?.error === 'DUPLICATE_EMAIL' ||
+        error.response?.data?.message?.includes('E11000') ||
+        error.response?.data?.error?.code === 11000)
+    ) {
+      message.warning("This email is already registered. Redirecting to login...");
+      setRedirecting(true);
+      setTimeout(() => navigate('/login'), 2000);
+    } else {
+      message.error(error.response?.data?.message || "Registration failed. Please try again.");
     }
-  };
+  }
+};
+
 
   //prevent for login user
   useEffect(() => {

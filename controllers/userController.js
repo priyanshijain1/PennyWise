@@ -1,13 +1,24 @@
 const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // LOGIN
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await userModel.findOne({ email, password });
+    
+    const user = await userModel.findOne({ email });
     if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    //Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(401).json({
         success: false,
         message: "Invalid email or password",
@@ -53,7 +64,16 @@ const registerController = async (req, res) => {
       });
     }
 
-    const newUser = new userModel({ email, name, password });
+    // ✅ Hash password before saving
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new userModel({
+      email,
+      name,
+      password: hashedPassword,
+    });
+
     await newUser.save();
 
     res.status(201).json({
