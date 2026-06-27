@@ -1,9 +1,11 @@
 import '@ant-design/v5-patch-for-react-19';
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "antd/dist/reset.css";
+
 function App() {
   return (
     <>
@@ -11,9 +13,9 @@ function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoutes>
+            <ProtectedRoute>
               <Homepage />
-            </ProtectedRoutes>
+            </ProtectedRoute>
           }
         />
         <Route path="/register" element={<Register />} />
@@ -21,12 +23,6 @@ function App() {
       </Routes>
     </>
   );
-}
-
-export function ProtectedRoutes({ children }) {
-  const token = localStorage.getItem("token");
-
-  return token ? children : <Navigate to="/login" replace />;
 }
 
 export default App;

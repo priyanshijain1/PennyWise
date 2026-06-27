@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, message, Card, Typography, Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, LockOutlined, LoginOutlined } from "@ant-design/icons";
-import axios from "axios";
+import API from "../utils/api";
 import Spinner from "../components/Spinner";
 
 const { Title, Text } = Typography;
@@ -15,7 +15,7 @@ const Login = () => {
   const submitHandler = async (values) => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/v1/users/login", values);
+      const { data } = await API.post("/users/login", values);
       setLoading(false);
       message.success("Welcome back! Login successful");
       localStorage.setItem("token", data.token);
@@ -41,7 +41,7 @@ const Login = () => {
     <div className="register-page">
       {loading && <Spinner />}
       
-      <Card className="auth-card" bordered={false}>
+      <Card className="auth-card" variant="borderless">
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <Title level={2} className="auth-title">
             Welcome Back

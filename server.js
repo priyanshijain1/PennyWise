@@ -23,7 +23,6 @@
 // // ROUTES
 // app.use('/api/v1/users', require('./routes/userRoute'))
 // app.use('/api/v1/transactions', require("./routes/transactionRoutes"));
-
 // // SERVE STATIC FILES FROM REACT BUILD
 // app.use(express.static(path.join(__dirname, './client/build')));
 
@@ -67,6 +66,7 @@ app.use(cors());
 // Routes
 app.use('/api/v1/users', require('./routes/userRoute'));
 app.use('/api/v1/transactions', require('./routes/transactionRoutes'));
+app.use('/api/v1/ai', require('./routes/aiRoutes'));
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, './client/build')));

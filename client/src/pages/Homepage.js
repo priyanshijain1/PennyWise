@@ -5,17 +5,13 @@ import {UnorderedListOutlined,AreaChartOutlined,EditOutlined,DeleteOutlined,Plus
   DollarOutlined,RiseOutlined,FallOutlined,CalendarOutlined,FilterOutlined,ExclamationCircleOutlined,WalletOutlined,
 } from "@ant-design/icons";
 import Layout from "./../components/Layout/Layout";
-import axios from "axios";
+import API from "../utils/api";
 import Spinner from "./../components/Spinner";
 import moment from "moment";
 import Analytics from "../components/Analytics";
+import AiInsights from "../components/AiInsights";
+import AiChat from "../components/AiChat";
 
-
-const getAuthConfig = () => ({
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
-});
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
@@ -157,13 +153,11 @@ const HomePage = () => {
   const getAllTransactions = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.post("/api/v1/transactions/get-transaction", {
+      const res = await API.post("/transactions/get-transaction", {
         frequency,
         selectedDate,
         type,
-      },
-      getAuthConfig()
-    );
+      });
       
 
       setLoading(false);
@@ -184,11 +178,9 @@ const HomePage = () => {
   const handleDelete = async (record) => {
     try {
       setLoading(true);
-      await axios.post("/api/v1/transactions/delete-transaction", {
+      await API.post("/transactions/delete-transaction", {
         transactionId: record._id,
-      },
-      getAuthConfig()
-    );
+      });
       setLoading(false);
       message.success("Transaction deleted successfully!");
       await getAllTransactions();
@@ -205,14 +197,12 @@ const HomePage = () => {
       setLoading(true);
       
       if (editable) {
-        await axios.post("/api/v1/transactions/edit-transaction", {
+        await API.post("/transactions/edit-transaction", {
           payload: {
             ...values,
           },
           transactionId: editable._id,
-        },
-        getAuthConfig()
-      );
+        });
         setLoading(false);
         message.success("Transaction updated successfully");
       } else {
@@ -221,7 +211,7 @@ const HomePage = () => {
           amount: Number(values.amount),
         };
 
-        await axios.post("/api/v1/transactions/add-transaction", transactionData,getAuthConfig());
+        await API.post("/transactions/add-transaction", transactionData);
         setLoading(false);
         message.success("Transaction added successfully");
       }
@@ -407,6 +397,9 @@ const HomePage = () => {
         )}
       </Card>
 
+      {/* AI Insights */}
+      <AiInsights transactions={alltransaction} />
+
       {/* Enhanced Modal */}
       <Modal
         title={
@@ -514,6 +507,9 @@ const HomePage = () => {
           </div>
         </Form>
       </Modal>
+
+      {/* AI Chat */}
+      <AiChat transactions={alltransaction} />
     </Layout>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, message, Card, Typography, Button, Alert } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, MailOutlined, LockOutlined, UserAddOutlined } from "@ant-design/icons";
-import axios from "axios";
+import API from "../utils/api";
 import Spinner from "../components/Spinner";
 
 const { Title, Text } = Typography;
@@ -20,7 +20,7 @@ const submitHandler = async (values) => {
     // remove confirmPassword before sending to backend
     const { confirmPassword, ...payload } = values;
 
-    await axios.post('/api/v1/users/register', payload);
+    await API.post('/users/register', payload);
 
     message.success("Account created successfully! Please sign in.");
     setLoading(false);
@@ -56,7 +56,7 @@ const submitHandler = async (values) => {
     <div className="register-page">
       {loading && <Spinner />}
       
-      <Card className="auth-card" bordered={false}>
+      <Card className="auth-card" variant="borderless">
         {redirecting && (
           <Alert
             message="Email Already Registered"
