@@ -11,6 +11,7 @@ import moment from "moment";
 import Analytics from "../components/Analytics";
 import AiInsights from "../components/AiInsights";
 import AiChat from "../components/AiChat";
+import ReceiptScanner from "../components/ReceiptScanner";
 
 
 const { RangePicker } = DatePicker;
@@ -352,18 +353,27 @@ const HomePage = () => {
           </Col>
 
           <Col xs={24} sm={6} style={{ textAlign: "right" }}>
-            <Button
-              type="primary"
-              size="large"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                setEditable(null);
-                form.resetFields();
-                setShowModal(true);
-              }}
-            >
-              Add Transaction
-            </Button>
+            <Space>
+              <ReceiptScanner
+                onScanComplete={(data) => {
+                  form.setFieldsValue(data);
+                  setEditable(null);
+                  setShowModal(true);
+                }}
+              />
+              <Button
+                type="primary"
+                size="large"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  setEditable(null);
+                  form.resetFields();
+                  setShowModal(true);
+                }}
+              >
+                Add Transaction
+              </Button>
+            </Space>
           </Col>
         </Row>
       </Card>

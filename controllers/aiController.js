@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const insights = require("../ai/insights");
 const chat = require("../ai/chat");
+const { scanReceipt } = require("../ai/ocr");
 
 const requestLog = new Map();
 const insightCache = new Map();
@@ -111,4 +112,17 @@ async function askQuestion(req, res) {
   }
 }
 
-module.exports = { getInsights, askQuestion };
+async function scanReceiptHandler(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No receipt image provided." });
+    }
+
+    const result = await scanReceipt(req.file.buffer);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message || "Failed to process receipt." });
+  }
+}
+
+module.exports = { getInsights, askQuestion, scanReceiptHandler };
